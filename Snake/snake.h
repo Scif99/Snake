@@ -32,6 +32,7 @@ public:
 	void update_direction();
 	void update_position();
 	bool contains(int x, int y); //Function that returns true if the node at coordinates (x,y) is a snake piece
+	bool intersect(); //Checks whether the snake has a self-collision
 	void reset();
 
 	piece& front() { return body[0]; }

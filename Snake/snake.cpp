@@ -10,6 +10,17 @@ void Snake::update_position()
 }
 
 
+bool Snake::intersect()
+{
+	for (int i = 1;i < body.size();++i) //Start at index 1 to avoid weirdness
+	{
+		if (body[0].location == body[i].location) return true;
+
+
+	}
+	return false;
+}
+
 void Snake::update_direction()
 {
 	

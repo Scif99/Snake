@@ -8,6 +8,8 @@
 #include <utility>
 #include <cstdlib>
 #include <unordered_map>
+#include <chrono>
+#include <thread>
 
 int main()
 {
@@ -27,7 +29,7 @@ int main()
         for (int x = 0;x < grid_dim;++x)
         {
             sf::RectangleShape node(node_size);
-            node.setFillColor(sf::Color::Black);
+            //node.setFillColor(sf::Color::Black);
             node.setOutlineColor(sf::Color::White);
             node.setOutlineThickness(-0.5f);
             node.setPosition(sf::Vector2f(x * 25.f, y*25.f));
@@ -38,13 +40,14 @@ int main()
 
     bool show_outline = true;
 
-    //Set initial point for snake
+    //Initialise snake
     std::pair<int, int> start_pos{ 10,10 };
     Snake snake(10, 10);
  
-    
+    //Set coordinates for apple
     std::pair<int, int> apple(rand()%grid_dim, rand()%grid_dim); //x,y
 
+    //**SHOULD DECREASE AS SNAKE INCREASES
     sf::Time interval = sf::milliseconds(100);
     sf::Clock clock;
 
@@ -68,31 +71,27 @@ int main()
                 }
 
                 //Movement
+                //Note that the snake is not allowed to turn 180 degrees (i.e turn in on itself)
                 if (event.key.code == sf::Keyboard::Up && snake.front().direction != std::make_pair(0,1))
                 {
-                    //--snake.location.second;
                     snake.front().direction = {0,-1};
                 }
 
                 if (event.key.code == sf::Keyboard::Down && snake.front().direction != std::make_pair(0, -1))
                 {
-                    //++snake.location.second;
                     snake.front().direction = { 0,1 };
                 }
 
                 if (event.key.code == sf::Keyboard::Left && snake.front().direction != std::make_pair(1, 0))
                 {
-                    //--snake.location.first;
                     snake.front().direction = { -1,0 };
                 }
 
                 if (event.key.code == sf::Keyboard::Right && snake.front().direction != std::make_pair(-1,0))
                 {
-                    //++snake.location.first;
                     snake.front().direction = {1,0 };
                 }
-
-                std::cout << "x: " << snake.front().location.first << "\ty: " << snake.front().location.second << '\n';
+                std::cout << "x: " << snake.front().location.first << "\ty: " << snake.front().location.second << '\n'; //Log
 
             }
         }
@@ -107,9 +106,10 @@ int main()
             clock.restart();
         }
 
-        //Reset if snake moves out of bounds
-        if (snake.front().location.first < 0 || snake.front().location.first >= grid_dim || snake.front().location.second < 0 || snake.front().location.second >= grid_dim)
+        //Reset if snake moves out of bounds or collides with itself
+        if (snake.intersect() || snake.front().location.first < 0 || snake.front().location.first >= grid_dim || snake.front().location.second < 0 || snake.front().location.second >= grid_dim)
         {
+            std::this_thread::sleep_for(std::chrono::milliseconds(500)); //Pause for a while when you lose
             snake.reset();
 
             //Reset apple too
@@ -117,9 +117,6 @@ int main()
             apple.second = rand() % grid_dim; //x,y
         }
        
-        //Need to check for self collisions
-
-
 
         //If the snake eats the apple, spawn apple at a new random point
         if (snake.front().location.first == apple.first && snake.front().location.second == apple.second)
