@@ -7,7 +7,6 @@
 #include <iostream>
 #include <utility>
 #include <cstdlib>
-#include <unordered_map>
 #include <chrono>
 #include <thread>
 
@@ -21,18 +20,18 @@ int main()
     std::vector<sf::RectangleShape> grid;
 
     //Constants
-    sf::Vector2f node_size(25.f, 25.f); 
+    int node_size= 25; 
 
     //Fill the grid
     for (int y = 0;y < grid_dim;++y)
     {
         for (int x = 0;x < grid_dim;++x)
         {
-            sf::RectangleShape node(node_size);
+            sf::RectangleShape node(sf::Vector2f(node_size, node_size));
             //node.setFillColor(sf::Color::Black);
-            node.setOutlineColor(sf::Color::White);
+            //node.setOutlineColor(sf::Color::White);
             node.setOutlineThickness(-0.5f);
-            node.setPosition(sf::Vector2f(x * 25.f, y*25.f));
+            node.setPosition(sf::Vector2f(x * node_size, y*node_size));
             grid.push_back(node);
         }
 
@@ -53,8 +52,6 @@ int main()
 
     while (window.isOpen())
     {
-
-
         sf::Event event;
         while (window.pollEvent(event))
         {
@@ -127,7 +124,7 @@ int main()
         }
 
 
-
+        //Draw
         window.clear();
         for (int y = 0;y < grid_dim;++y)
         {
@@ -135,10 +132,8 @@ int main()
             {
                 int index = y * grid_dim + x;
                 sf::RectangleShape& curr = grid[index];
-                curr.setFillColor(sf::Color::Black);
-
                 curr.setOutlineThickness(-float(show_outline) / 2.f);
-
+                curr.setFillColor(sf::Color::Black);
                 //Need to check if this point is occupied by any of the snake pieces
                 if(snake.contains(x,y))
                 {
@@ -149,7 +144,6 @@ int main()
                 {
                     curr.setFillColor(sf::Color::Red);
                 }
-
                 window.draw(grid[y * grid_dim + x]);
             }
         }
