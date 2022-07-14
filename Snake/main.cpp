@@ -14,7 +14,6 @@ int main()
 {
     sf::RenderWindow window(sf::VideoMode(500, 500), "Snake");
 
-
     //Create a grid that contains the nodes
     constexpr int grid_dim = 20;
     std::vector<sf::RectangleShape> grid;
@@ -104,14 +103,19 @@ int main()
         }
 
         //Reset if snake moves out of bounds or collides with itself
-        if (snake.intersect() || snake.front().location.first < 0 || snake.front().location.first >= grid_dim || snake.front().location.second < 0 || snake.front().location.second >= grid_dim)
+        if (snake.intersect()
+            || snake.front().location.first < 0 || snake.front().location.first >= grid_dim  //out of bounds in x direction
+            || snake.front().location.second < 0 || snake.front().location.second >= grid_dim) //out of bounds in y direction
         {
             std::this_thread::sleep_for(std::chrono::milliseconds(500)); //Pause for a while when you lose
             snake.reset();
 
             //Reset apple too
-            apple.first = rand() % grid_dim;
-            apple.second = rand() % grid_dim; //x,y
+            //But make sure it doesnt spawn inside the snake
+            do {
+                apple.first = rand() % grid_dim;
+                apple.second = rand() % grid_dim; //x,y
+            } while (snake.contains(apple.first, apple.second));
         }
        
 
