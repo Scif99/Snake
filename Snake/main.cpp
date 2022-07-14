@@ -5,6 +5,7 @@
 #include <vector>
 #include <iostream>
 #include <utility>
+#include <cstdlib>
 int main()
 {
     sf::RenderWindow window(sf::VideoMode(500, 500), "Snake");
@@ -34,6 +35,8 @@ int main()
 
     //Set initial point for snake
     std::pair<int, int> snake(10,10); //x,y
+    
+    std::pair<int, int> apple(rand()%grid_dim, rand()%grid_dim); //x,y
 
 
 
@@ -76,16 +79,31 @@ int main()
             }
         }
 
+        if (snake.first == apple.first && snake.second == apple.second)
+        {
+            apple.first = rand() % grid_dim;
+            apple.second = rand() % grid_dim; //x,y
+
+        }
+
+
+
         window.clear();
         for (int y = 0;y < grid_dim;++y)
         {
             for (int x = 0;x < grid_dim;++x)
             {
                 grid[y * grid_dim + x].setFillColor(sf::Color::Black);
-                if (x == snake.first && y == snake.second) 
+                if (x == snake.first && y == snake.second) //Snake is on this node
                 {
                     grid[y * grid_dim + x].setFillColor(sf::Color::Green);
                 }
+
+                if (x == apple.first && y == apple.second) //Snake is on this node
+                {
+                    grid[y * grid_dim + x].setFillColor(sf::Color::Red);
+                }
+
                 window.draw(grid[y * grid_dim + x]);
             }
         }
