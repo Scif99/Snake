@@ -116,6 +116,8 @@ int main()
             apple.first = rand() % grid_dim;
             apple.second = rand() % grid_dim; //x,y
         }
+       
+        //Need to check for self collisions
 
 
 
