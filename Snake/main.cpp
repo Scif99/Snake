@@ -33,6 +33,8 @@ int main()
 
     }
 
+    bool show_outline = true;
+
     //Set initial point for snake
     std::pair<int, int> snake(10,10); //x,y
     
@@ -50,6 +52,11 @@ int main()
 
             if (event.type == sf::Event::KeyPressed)
             {
+                if (event.key.code == sf::Keyboard::Tab)
+                {
+                    show_outline = !show_outline;
+                }
+
                 //Movement
                 if (event.key.code == sf::Keyboard::Up && snake.second>0)
                 {
@@ -79,6 +86,7 @@ int main()
             }
         }
 
+        //If the snake eats the apple, spawn apple at a new random point
         if (snake.first == apple.first && snake.second == apple.second)
         {
             apple.first = rand() % grid_dim;
@@ -93,15 +101,20 @@ int main()
         {
             for (int x = 0;x < grid_dim;++x)
             {
-                grid[y * grid_dim + x].setFillColor(sf::Color::Black);
+                int index = y * grid_dim + x;
+                sf::RectangleShape& curr = grid[index];
+                curr.setFillColor(sf::Color::Black);
+
+                curr.setOutlineThickness(-float(show_outline) / 2.f);
+
                 if (x == snake.first && y == snake.second) //Snake is on this node
                 {
-                    grid[y * grid_dim + x].setFillColor(sf::Color::Green);
+                    curr.setFillColor(sf::Color::Green);
                 }
 
                 if (x == apple.first && y == apple.second) //Snake is on this node
                 {
-                    grid[y * grid_dim + x].setFillColor(sf::Color::Red);
+                    curr.setFillColor(sf::Color::Red);
                 }
 
                 window.draw(grid[y * grid_dim + x]);
