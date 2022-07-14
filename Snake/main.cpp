@@ -38,7 +38,7 @@ int main()
 
     }
 
-    bool show_outline = true;
+    bool show_outline = false; //Toggle grid lines
 
     //Initialise snake
     std::pair<int, int> start_pos{ 10,10 };
@@ -91,7 +91,7 @@ int main()
                 {
                     snake.front().direction = {1,0 };
                 }
-                std::cout << "x: " << snake.front().location.first << "\ty: " << snake.front().location.second << '\n'; //Log
+                //std::cout << "x: " << snake.front().location.first << "\ty: " << snake.front().location.second << '\n'; //Log
 
             }
         }
