@@ -1,29 +1,49 @@
+#include "snake.h"
 
-#include <utility>
-#include <vector>
-#include <unordered_map>
-#include <string>
-#include <utility>
-
-//A snake is comprised of a number of pieces
-//Each piece consists of a pair of coordinates representing it's position on the grid
-//Each piece also contains a and a 
-struct piece {
-	std::pair<int, int> location;
-
-};
-
-class Snake
+void Snake::update_position()
 {
-public:
-	Snake(int x, int y) {}
+	for (auto& piece : body)
+	{
+		piece.location.first += piece.direction.first;
+		piece.location.second += piece.direction.second;
+	}
+}
 
-	void set_position(int x, int y);
 
-private:
-	std::vector<std::pair<int, int>> body; //The snake is  a vector of coordinate pairs
-	std::unordered_map<std::string, std::pair<int, int>> directions{ {"UP",{-1,0}},
-																	 {"Down",{0,1}},
-																	 {"LEFT",{-1,0}},
-																	 {"RIGHT",{1,0}} };
-};
+void Snake::update_direction()
+{
+	
+	for(int i =1;i<body.size();++i)
+	{
+		
+		body[i].direction.first = body[i - 1].location.first - body[i].location.first;
+		body[i].direction.second = body[i - 1].location.second - body[i].location.second;
+	}
+}
+
+
+void Snake::add_piece()
+{
+	piece last_piece = body.back(); 
+	std::pair<int, int> new_coords{ last_piece.location.first - last_piece.direction.first, //coords of piece to be added
+									last_piece.location.second - last_piece.direction.second }; 
+	std::pair<int, int> new_dir{ last_piece.location.first - new_coords.first, last_piece.location.second - new_coords.second };
+
+	body.emplace_back(new_coords.first,new_coords.second,new_dir.first,new_dir.second);
+}
+
+bool Snake::contains(int x, int y)
+{
+	for (const auto& piece : body)
+	{
+		if (piece.location.first == x && piece.location.second == y) return true;
+	}
+	return false;
+}
+
+//Reset snake to starting point, with only one piece
+void Snake::reset()
+{
+	piece start{ 10,10,0,0 };
+	body = { start };
+}

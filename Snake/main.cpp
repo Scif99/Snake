@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 
-#include "grid.cpp"
+#include "snake.h"
+
 
 #include <vector>
 #include <iostream>
@@ -8,14 +9,6 @@
 #include <cstdlib>
 #include <unordered_map>
 
-struct Snake
-{
-    std::pair<int, int> location;
-    std::pair<int, int> direction{0,0};
-
-    Snake(int x, int y)
-        :location({ x,y }) {}
-};
 int main()
 {
     sf::RenderWindow window(sf::VideoMode(500, 500), "Snake");
@@ -52,10 +45,13 @@ int main()
     
     std::pair<int, int> apple(rand()%grid_dim, rand()%grid_dim); //x,y
 
-
+    sf::Time interval = sf::milliseconds(100);
+    sf::Clock clock;
 
     while (window.isOpen())
     {
+
+
         sf::Event event;
         while (window.pollEvent(event))
         {
@@ -72,54 +68,61 @@ int main()
                 }
 
                 //Movement
-                if (event.key.code == sf::Keyboard::Up && snake.direction != std::make_pair(0,1))
+                if (event.key.code == sf::Keyboard::Up && snake.front().direction != std::make_pair(0,1))
                 {
                     //--snake.location.second;
-                    snake.direction = { 0,-1 };
+                    snake.front().direction = {0,-1};
                 }
 
-                if (event.key.code == sf::Keyboard::Down && snake.direction != std::make_pair(0, -1))
+                if (event.key.code == sf::Keyboard::Down && snake.front().direction != std::make_pair(0, -1))
                 {
                     //++snake.location.second;
-                    snake.direction = { 0,1 };
+                    snake.front().direction = { 0,1 };
                 }
 
-                if (event.key.code == sf::Keyboard::Left && snake.direction != std::make_pair(1, 0))
+                if (event.key.code == sf::Keyboard::Left && snake.front().direction != std::make_pair(1, 0))
                 {
                     //--snake.location.first;
-                    snake.direction = { -1,0 };
+                    snake.front().direction = { -1,0 };
                 }
 
-                if (event.key.code == sf::Keyboard::Right && snake.direction != std::make_pair(-1,0))
+                if (event.key.code == sf::Keyboard::Right && snake.front().direction != std::make_pair(-1,0))
                 {
                     //++snake.location.first;
-                    snake.direction = {1,0 };
+                    snake.front().direction = {1,0 };
                 }
 
-                std::cout << "x: " << snake.location.first << "\ty: " << snake.location.second << '\n';
+                std::cout << "x: " << snake.front().location.first << "\ty: " << snake.front().location.second << '\n';
 
             }
         }
 
         //Update position
-        snake.location.first += snake.direction.first;
-        snake.location.second+= snake.direction.second;
-
-
-        if (snake.location.first < 0 || snake.location.first >= grid_dim || snake.location.second < 0 || snake.location.second >= grid_dim)
+        sf::Time elapsed1 = clock.getElapsedTime();
+        snake.update_direction();
+        
+        if (elapsed1 > interval)
         {
-            snake.location = start_pos;
+            snake.update_position();
+            clock.restart();
+        }
+
+        //Reset if snake moves out of bounds
+        if (snake.front().location.first < 0 || snake.front().location.first >= grid_dim || snake.front().location.second < 0 || snake.front().location.second >= grid_dim)
+        {
+            snake.reset();
+
+            //Reset apple too
+            apple.first = rand() % grid_dim;
+            apple.second = rand() % grid_dim; //x,y
         }
 
 
 
-
-
-
-
         //If the snake eats the apple, spawn apple at a new random point
-        if (snake.location.first == apple.first && snake.location.second == apple.second)
+        if (snake.front().location.first == apple.first && snake.front().location.second == apple.second)
         {
+            snake.add_piece(); //Add a piece to the tail of the snake
             apple.first = rand() % grid_dim;
             apple.second = rand() % grid_dim; //x,y
         }
@@ -137,12 +140,13 @@ int main()
 
                 curr.setOutlineThickness(-float(show_outline) / 2.f);
 
-                if (x == snake.location.first && y == snake.location.second) //Snake is on this node
+                //Need to check if this point is occupied by any of the snake pieces
+                if(snake.contains(x,y))
                 {
                     curr.setFillColor(sf::Color::Green);
                 }
 
-                if (x == apple.first && y == apple.second) //Snake is on this node
+                if (x == apple.first && y == apple.second) //Apple is on this node
                 {
                     curr.setFillColor(sf::Color::Red);
                 }
