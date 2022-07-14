@@ -2,38 +2,40 @@
 
 #include "grid.cpp"
 
-#include <cstdlib>
 #include <vector>
+#include <iostream>
+#include <utility>
 int main()
 {
     sf::RenderWindow window(sf::VideoMode(500, 500), "Snake");
 
 
     //Create a grid that contains the nodes
+    constexpr int grid_dim = 20;
     std::vector<sf::RectangleShape> grid;
 
-    sf::Vector2f node_size(25.f, 25.f); //Fixed size of nodes
+    //Constants
 
-    for (int i = 0;i < 20;++i)
+    sf::Vector2f node_size(25.f, 25.f); 
+
+    for (int y = 0;y < grid_dim;++y)
     {
-        for (int j = 0;j < 20;++j)
+        for (int x = 0;x < grid_dim;++x)
         {
             sf::RectangleShape node(node_size);
             node.setFillColor(sf::Color::Black);
             node.setOutlineColor(sf::Color::White);
             node.setOutlineThickness(-0.5f);
-            node.setPosition(sf::Vector2f(i * 25.f, j*25.f));
+            node.setPosition(sf::Vector2f(x * 25.f, y*25.f));
             grid.push_back(node);
         }
 
     }
 
+    //Set initial point for snake
+    std::pair<int, int> snake(10,10); //x,y
 
-    sf::RectangleShape apple(node_size);
-    apple.setFillColor(sf::Color::Red);
-    apple.setPosition(0.f, 0.f);
-    apple.setOutlineColor(sf::Color::White);
-    apple.setOutlineThickness(-0.5f);
+
 
     while (window.isOpen())
     {
@@ -45,16 +47,48 @@ int main()
 
             if (event.type == sf::Event::KeyPressed)
             {
-                if (event.key.code == sf::Keyboard::Up)
+                //Movement
+                if (event.key.code == sf::Keyboard::Up && snake.second>0)
                 {
-
+                    --snake.second;
+                    std::cout << "x: " << snake.first << "\ty: " << snake.second << '\n';
                 }
+
+                if (event.key.code == sf::Keyboard::Down && snake.second < grid_dim-1)
+                {
+                    ++snake.second;
+                    std::cout << "x: " << snake.first << "\ty: " << snake.second << '\n';
+                }
+
+                if (event.key.code == sf::Keyboard::Left && snake.first > 0)
+                {
+                    --snake.first;
+                    std::cout << "x: " << snake.first << "\ty: " << snake.second << '\n';
+                }
+
+                if (event.key.code == sf::Keyboard::Right && snake.first <grid_dim-1)
+                {
+                    ++snake.first;
+                    std::cout << "x: " << snake.first << "\ty: " << snake.second << '\n';
+                }
+
+
             }
         }
 
         window.clear();
-        for (const auto& node : grid) window.draw(node);
-        window.draw(apple);
+        for (int y = 0;y < grid_dim;++y)
+        {
+            for (int x = 0;x < grid_dim;++x)
+            {
+                grid[y * grid_dim + x].setFillColor(sf::Color::Black);
+                if (x == snake.first && y == snake.second) 
+                {
+                    grid[y * grid_dim + x].setFillColor(sf::Color::Green);
+                }
+                window.draw(grid[y * grid_dim + x]);
+            }
+        }
         window.display();
     }
 
