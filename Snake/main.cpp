@@ -1,7 +1,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "snake.h"
-
+#include "start_menu.h"
 
 #include <vector>
 #include <iostream>
@@ -9,17 +9,19 @@
 #include <cstdlib>
 #include <chrono>
 #include <thread>
+#include <algorithm>
 
 int main()
 {
     sf::RenderWindow window(sf::VideoMode(500, 500), "Snake");
+    window.setKeyRepeatEnabled(false);
 
     //Create a grid that contains the nodes
-    constexpr int grid_dim = 20;
+    constexpr int grid_dim = 20; //number of rows/columns
     std::vector<sf::RectangleShape> grid;
 
     //Constants
-    int node_size= 25; 
+    int node_size= window.getSize().x / grid_dim; //size of the node in pixels 
 
     //Fill the grid
     for (int y = 0;y < grid_dim;++y)
@@ -27,19 +29,13 @@ int main()
         for (int x = 0;x < grid_dim;++x)
         {
             sf::RectangleShape node(sf::Vector2f(node_size, node_size));
-            //node.setFillColor(sf::Color::Black);
-            //node.setOutlineColor(sf::Color::White);
-            node.setOutlineThickness(-0.5f);
             node.setPosition(sf::Vector2f(x * node_size, y*node_size));
             grid.push_back(node);
         }
 
     }
 
-    bool show_outline = false; //Toggle grid lines
-
     //Initialise snake
-    std::pair<int, int> start_pos{ 10,10 };
     Snake snake(10, 10);
  
     //Set coordinates for apple
@@ -48,6 +44,9 @@ int main()
     //**SHOULD DECREASE AS SNAKE INCREASES
     sf::Time interval = sf::milliseconds(100);
     sf::Clock clock;
+
+    StartMenu start(window.getSize().x, window.getSize().y); 
+
 
     while (window.isOpen())
     {
@@ -60,35 +59,31 @@ int main()
             if (event.type == sf::Event::KeyPressed)
             {
 
-                //Toggle to show outline of grid
-                if (event.key.code == sf::Keyboard::Tab)
-                {
-                    show_outline = !show_outline;
-                }
-
                 //Movement
                 //Note that the snake is not allowed to turn 180 degrees (i.e turn in on itself)
                 if (event.key.code == sf::Keyboard::Up && snake.front().direction != std::make_pair(0,1))
                 {
                     snake.front().direction = {0,-1};
+                    break;
                 }
 
                 if (event.key.code == sf::Keyboard::Down && snake.front().direction != std::make_pair(0, -1))
                 {
                     snake.front().direction = { 0,1 };
+                    break;
                 }
 
                 if (event.key.code == sf::Keyboard::Left && snake.front().direction != std::make_pair(1, 0))
                 {
                     snake.front().direction = { -1,0 };
+                    break;
                 }
 
                 if (event.key.code == sf::Keyboard::Right && snake.front().direction != std::make_pair(-1,0))
                 {
                     snake.front().direction = {1,0 };
+                    break;
                 }
-                //std::cout << "x: " << snake.front().location.first << "\ty: " << snake.front().location.second << '\n'; //Log
-
             }
         }
 
@@ -96,16 +91,19 @@ int main()
         sf::Time elapsed1 = clock.getElapsedTime();
         snake.update_direction();
         
+
+
         if (elapsed1 > interval)
         {
+            
             snake.update_position();
             clock.restart();
         }
 
         //Reset if snake moves out of bounds or collides with itself
-        if (snake.intersect()
-            || snake.front().location.first < 0 || snake.front().location.first >= grid_dim  //out of bounds in x direction
-            || snake.front().location.second < 0 || snake.front().location.second >= grid_dim) //out of bounds in y direction
+        auto front_coords = snake.front().location;
+        if (snake.intersect() || std::clamp(front_coords.first, 0, grid_dim - 1) != front_coords.first 
+            || std::clamp(front_coords.second,0,grid_dim-1) !=front_coords.second)
         {
             std::this_thread::sleep_for(std::chrono::milliseconds(500)); //Pause for a while when you lose
             snake.reset();
@@ -135,20 +133,22 @@ int main()
             for (int x = 0;x < grid_dim;++x)
             {
                 int index = y * grid_dim + x;
+
                 sf::RectangleShape& curr = grid[index];
-                curr.setOutlineThickness(-float(show_outline) / 2.f);
-                curr.setFillColor(sf::Color::Black);
+
                 //Need to check if this point is occupied by any of the snake pieces
                 if(snake.contains(x,y))
                 {
                     curr.setFillColor(sf::Color::Green);
+                    window.draw(grid[y * grid_dim + x]);
                 }
 
                 if (x == apple.first && y == apple.second) //Apple is on this node
                 {
                     curr.setFillColor(sf::Color::Red);
+                    window.draw(grid[y * grid_dim + x]);
                 }
-                window.draw(grid[y * grid_dim + x]);
+                //window.draw(grid[y * grid_dim + x]);
             }
         }
         window.display();

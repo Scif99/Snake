@@ -28,9 +28,9 @@ class Snake
 public:
 
 	Snake(int x, int y) //Constructor
-	{
-		body.emplace_back(x, y, 0, 0);
-	}
+		:body{ piece(x,y,0,0) } {}
+
+
 	void add_piece(); //Adds a piece to the tail of the snake, increasing the length of the snake by 1 node
 	void update_direction(); //Updates directions of each piece in the snake
 	void update_position(); //Updates positions of each piece in the snake
