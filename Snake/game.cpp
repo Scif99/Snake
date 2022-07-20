@@ -10,7 +10,7 @@
 /// Game starts in the StartMenu state
 /// </summary>
 Game::Game()
-	: window{ sf::VideoMode(500, 500), "Snake" }, snake{10,10}
+	: window{ sf::VideoMode(500, 500), "Snake" }
 {
 	state = new StartMenu(this);
 }

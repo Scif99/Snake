@@ -1,9 +1,9 @@
 #include "start_menu.h"
 #include "game.h"
-#include "PlayGame.h"
+#include "play_game.h"
 
 StartMenu::StartMenu(Game* game)
-	:GameState{ game }, curr_index{ 0 },width{pGame->window.getSize().x}, height{pGame->window.getSize().y}
+	:pGame{ game }, curr_index{ 0 },width{pGame->window.getSize().x}, height{pGame->window.getSize().y}
 {
 	if (!font.loadFromFile("arial.ttf"))
 	{

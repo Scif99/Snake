@@ -29,7 +29,7 @@ void Snake::update_position()
 }
 
 
-bool Snake::intersect()
+bool Snake::intersect() const
 {
 	for (int i = 1;i < body.size();++i) //Start at index 1 to avoid weirdness
 	{
@@ -41,7 +41,7 @@ bool Snake::intersect()
 
 
 
-bool Snake::contains(int x, int y) //Checks whether a piece of the snake lies on node with coordinates (x,y)
+bool Snake::contains(int x, int y) const //Checks whether a piece of the snake lies on node with coordinates (x,y)
 {
 	for (const auto& piece : body)
 	{

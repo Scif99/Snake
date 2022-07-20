@@ -34,11 +34,11 @@ public:
 	void add_piece(); //Adds a piece to the tail of the snake, increasing the length of the snake by 1 node
 	void update_direction(); //Updates directions of each piece in the snake
 	void update_position(); //Updates positions of each piece in the snake
-	bool contains(int x, int y); //Function that returns true if the node at coordinates (x,y) is a snake piece
-	bool intersect(); //Checks whether the snake has a self-collision
+	bool contains(int x, int y) const; //Function that returns true if the node at coordinates (x,y) is a snake piece
+	bool intersect() const; //Checks whether the snake has a self-collision
 	void reset();
 
-	piece& front() { return body[0]; }
+	piece& front() { return body[0]; } 
 	const piece& front() const { return body[0]; }
 
 private:

@@ -14,7 +14,4 @@ public:
 	
 private:
 	GameState* state;
-
-	//assets
-	Snake snake;
 };

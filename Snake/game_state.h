@@ -8,13 +8,11 @@ class Game {};
 class GameState : sf::Drawable
 {
 public:
-	GameState(Game* game)
-		:pGame{ game } {}
+	GameState() {};
 	virtual ~GameState() = default; //Default
 	virtual void HandleEvents(sf::Event event) = 0;
 	virtual void Update();
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override; 
-private:
-	Game* pGame;
+
 };
 
