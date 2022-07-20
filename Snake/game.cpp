@@ -5,14 +5,10 @@
 #include "start_menu.h"
 
 
-
-/// <summary>
-/// Game starts in the StartMenu state
-/// </summary>
 Game::Game()
-	: window{ sf::VideoMode(500, 500), "Snake" }
+	: window{ sf::VideoMode(500, 500), "Snake" }, state{nullptr}
 {
-	state = new StartMenu(this);
+	state = std::make_unique<StartMenu>(std::make_unique<Game>(*this)); //Game always starts in the StartMenu state
 }
 
 
@@ -22,10 +18,9 @@ void Game::run()
 	while (window.isOpen())
 	{
 		//Handle events/input
-		sf::Event event;
-		state->HandleEvents(event);
+		state->HandleEvents();
 
-		//state->Update(); //for changing state?
+		state->Update(); //for changing state?
 		 
 		//Draw onto windo
 		window.clear();
@@ -35,7 +30,7 @@ void Game::run()
 
 }
 
-void Game::ChangeState(GameState* next_state)
+void Game::ChangeState(std::unique_ptr<GameState> next_state)
 {
-	state = next_state;
+	state = std::move(next_state);
 }

@@ -1,6 +1,7 @@
 #pragma once
 #include "game_state.h"
-#include "snake.h"
+#include <memory>
+
 
 class Game
 {
@@ -9,9 +10,9 @@ public:
 	~Game() {};
 
 	void run();
-	void ChangeState(GameState*); //Change the state of the game
+	void ChangeState(std::unique_ptr<GameState> next_state); //Change the state of the game
 	sf::RenderWindow window;
 	
 private:
-	GameState* state;
+	std::unique_ptr<GameState> state;
 };

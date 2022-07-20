@@ -2,8 +2,11 @@
 #include "game.h"
 #include "play_game.h"
 
-StartMenu::StartMenu(Game* game)
-	:pGame{ game }, curr_index{ 0 },width{pGame->window.getSize().x}, height{pGame->window.getSize().y}
+#include <memory>
+#include <SFML/Graphics.hpp>
+
+StartMenu::StartMenu(std::unique_ptr<Game> game)
+	: GameState(std::move(game)), curr_index{ 0 },width{pGame->window.getSize().x}, height{pGame->window.getSize().y}
 {
 	if (!font.loadFromFile("arial.ttf"))
 	{
@@ -30,8 +33,9 @@ StartMenu::StartMenu(Game* game)
 
 
 
-void StartMenu::HandleEvents(sf::Event event)
+void StartMenu::HandleEvents()
 {
+	sf::Event event;
 	while (pGame->window.pollEvent(event))
 	{
 		if (event.type == sf::Event::KeyPressed)
@@ -54,7 +58,8 @@ void StartMenu::HandleEvents(sf::Event event)
 					items[curr_index].setFillColor(sf::Color::Red);
 				}
 			case sf::Keyboard::Return:
-				pGame->ChangeState(new PlayGame(pGame));
+				//pGame->ChangeState(std::make_unique<PlayGame>());
+				break;
 			}
 		}
 

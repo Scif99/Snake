@@ -6,19 +6,17 @@
 class StartMenu : public GameState
 {
 public:
-	StartMenu(Game* game);
+	StartMenu(std::unique_ptr<Game> game);
 	~StartMenu() {};
-	void HandleEvents(sf::Event event) override;
-	void Update();
+	void HandleEvents() override;
+	void Update() {};
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 private:
-	Game* pGame;
+	std::unique_ptr<Game> pGame;
 	int curr_index; //index of the highlighted item
-	float width;
-	float height;
+	unsigned int width;
+	unsigned int height;
 	sf::Font font;
 	sf::Text items[3];
-	
-
 };

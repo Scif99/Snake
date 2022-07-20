@@ -1,10 +1,9 @@
 #include "play_game.h"
-#include "game.h"
 #include <thread>
 #include <chrono>
 
-PlayGame::PlayGame(Game* game)
-    : pGame(game), snake( 10,10 ), apple(rand() % grid_dim, rand() % grid_dim), grid_dim(20) //, game_over(false) //Apple should be rando
+PlayGame::PlayGame(std::unique_ptr<Game> game)
+    : GameState(std::move(game)), snake( 10,10 ), apple(rand() % grid_dim, rand() % grid_dim), grid_dim(20) //, game_over(false) //Apple should be rando
 {
     //Constants
     int node_size = pGame->window.getSize().x / grid_dim; //size of the node in pixels 
@@ -24,8 +23,9 @@ PlayGame::PlayGame(Game* game)
 
 }
 
-void PlayGame::HandleEvents(sf::Event event)
+void PlayGame::HandleEvents()
 {
+    sf::Event event;
     while (pGame->window.pollEvent(event))
     {
 

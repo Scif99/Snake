@@ -1,11 +1,6 @@
-#include <SFML/Graphics.hpp>
-
-#include "snake.h"
-#include "start_menu.h"
 #include "game.h"
-#include "play_game.h"
 
-
+//Entry point
 int main()
 {
     Game game;

@@ -27,9 +27,6 @@
     <ClCompile Include="game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="grid.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="play_game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -47,13 +44,7 @@
     <ClInclude Include="start_menu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="grid.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="play_game.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="game_over.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
