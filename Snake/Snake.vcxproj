@@ -163,8 +163,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game.h" />
+    <ClInclude Include="game_over.h" />
     <ClInclude Include="game_state.h" />
     <ClInclude Include="grid.h" />
+    <ClInclude Include="PlayGame.h" />
     <ClInclude Include="snake.h" />
     <ClInclude Include="start_menu.h" />
   </ItemGroup>

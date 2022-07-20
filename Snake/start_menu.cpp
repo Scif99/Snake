@@ -1,8 +1,9 @@
 #include "start_menu.h"
+#include "game.h"
+#include "PlayGame.h"
 
-StartMenu::StartMenu()
-	: curr_index{ 0 }
-
+StartMenu::StartMenu(Game* game)
+	:GameState{ game }, curr_index{ 0 },width{pGame->window.getSize().x}, height{pGame->window.getSize().y}
 {
 	if (!font.loadFromFile("arial.ttf"))
 	{
@@ -27,8 +28,38 @@ StartMenu::StartMenu()
 	items[curr_index].setFillColor(sf::Color::Red); //Highlight 
 }
 
-void StartMenu::HandleInput(sf::Event event)
+
+
+void StartMenu::HandleEvents(sf::Event event)
 {
+	while (pGame->window.pollEvent(event))
+	{
+		if (event.type == sf::Event::KeyPressed)
+		{
+			switch (event.key.code)
+			{
+			
+			case sf::Keyboard::Up:
+				if (curr_index > 0)
+				{
+					items[curr_index].setFillColor(sf::Color::White);
+					--curr_index;
+					items[curr_index].setFillColor(sf::Color::Red);
+				}
+			case sf::Keyboard::Down:
+				if (curr_index < 2)
+				{
+					items[curr_index].setFillColor(sf::Color::White);
+					++curr_index;
+					items[curr_index].setFillColor(sf::Color::Red);
+				}
+			case sf::Keyboard::Return:
+				pGame->ChangeState(new PlayGame(pGame));
+			}
+		}
+
+	}
+	
 
 }
 

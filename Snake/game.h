@@ -6,13 +6,15 @@ class Game
 {
 public:
 	Game();
-	~Game();
+	~Game() {};
 
 	void run();
-
-private:
+	void ChangeState(GameState*); //Change the state of the game
 	sf::RenderWindow window;
+	
+private:
 	GameState* state;
+
 	//assets
 	Snake snake;
 };

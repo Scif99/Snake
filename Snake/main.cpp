@@ -45,9 +45,6 @@ int main()
     sf::Time interval = sf::milliseconds(100);
     sf::Clock clock;
 
-    StartMenu start(window.getSize().x, window.getSize().y); 
-
-
     while (window.isOpen())
     {
         sf::Event event;

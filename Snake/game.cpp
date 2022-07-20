@@ -2,26 +2,17 @@
 
 
 #include "game.h"
-#include "game_state.h"
+#include "start_menu.h"
 
-#include <vector>
-#include <iostream>
-#include <utility>
-#include <cstdlib>
-#include <chrono>
-#include <thread>
-#include <algorithm>
+
 
 /// <summary>
 /// Game starts in the StartMenu state
 /// </summary>
 Game::Game()
-	: window{ sf::VideoMode(500, 500), "Snake" }, snake{10,10} , state{new StartMenu()}
+	: window{ sf::VideoMode(500, 500), "Snake" }, snake{10,10}
 {
-	state->Init();
-
-
-
+	state = new StartMenu(this);
 }
 
 
@@ -31,13 +22,20 @@ void Game::run()
 	while (window.isOpen())
 	{
 		//Handle events/input
-		//sf::Event event;
-		//state->HandleInput(event);
+		sf::Event event;
+		state->HandleEvents(event);
 
-		state->Update(); //for changing state?
-		//window.clear();
+		//state->Update(); //for changing state?
+		 
+		//Draw onto windo
+		window.clear();
 		state->draw(window, sf::RenderStates::Default);
-		//window.display();
+		window.display();
 	}
 
+}
+
+void Game::ChangeState(GameState* next_state)
+{
+	state = next_state;
 }
