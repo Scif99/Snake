@@ -28,7 +28,7 @@ class Snake
 public:
 
 	Snake(int x, int y) //Constructor
-		:body{ piece(x,y,0,0) } {}
+		:body{ piece{x,y,0,0} } {}
 
 
 	void add_piece(); //Adds a piece to the tail of the snake, increasing the length of the snake by 1 node

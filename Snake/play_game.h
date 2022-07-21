@@ -8,17 +8,17 @@
 class PlayGame : public GameState
 {
 public:
-	PlayGame(std::unique_ptr<Game> game);
+	PlayGame(std::shared_ptr<Context> context);
 	~PlayGame() {};
 	void HandleEvents() override;
-	void Update();
-	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+	void Update() override;
+	virtual void Draw() override;
 
 private:
-	std::unique_ptr<Game> pGame;
+	std::shared_ptr<Context> pContext;
 	Snake snake;
 	std::pair<int, int> apple;
 	std::vector<sf::RectangleShape> grid;
-	int grid_dim;
+	int grid_dim{20};
 	//bool game_over;
 };

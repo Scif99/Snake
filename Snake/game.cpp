@@ -1,36 +1,33 @@
 #include <SFML/Graphics.hpp>
-
-
 #include "game.h"
 #include "start_menu.h"
 
+#include <iostream>
 
 Game::Game()
-	: window{ sf::VideoMode(500, 500), "Snake" }, state{nullptr}
+	: context{std::make_shared<Context>()}
 {
-	state = std::make_unique<StartMenu>(std::make_unique<Game>(*this)); //Game always starts in the StartMenu state
+	
+	context->window->create(sf::VideoMode(500, 500), "Snake");
+	context->state = std::make_unique<StartMenu>(context); //Game always starts in the StartMenu state
+
 }
 
 
 //The run() function handles updating the state of the game
+//TODO Implement timing correctly
 void Game::run() 
 {
-	while (window.isOpen())
+	while (context->window->isOpen())
 	{
-		//Handle events/input
-		state->HandleEvents();
 
-		state->Update(); //for changing state?
-		 
-		//Draw onto windo
-		window.clear();
-		state->draw(window, sf::RenderStates::Default);
-		window.display();
+		context->state->HandleEvents();
+
+		context->state->Update(); //for changing state?
+		
+		context->window->clear();
+		context->state->Draw();
+		context->window->display();
 	}
 
-}
-
-void Game::ChangeState(std::unique_ptr<GameState> next_state)
-{
-	state = std::move(next_state);
 }

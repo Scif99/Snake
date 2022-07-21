@@ -1,12 +1,12 @@
 #include "start_menu.h"
-#include "game.h"
 #include "play_game.h"
 
 #include <memory>
 #include <SFML/Graphics.hpp>
+#include <iostream>
 
-StartMenu::StartMenu(std::unique_ptr<Game> game)
-	: GameState(std::move(game)), curr_index{ 0 },width{pGame->window.getSize().x}, height{pGame->window.getSize().y}
+StartMenu::StartMenu(std::shared_ptr<Context>& context)
+	: pContext{ context }, curr_index{ 0 }, width{ context->window->getSize().x }, height{ context->window->getSize().y }
 {
 	if (!font.loadFromFile("arial.ttf"))
 	{
@@ -36,30 +36,37 @@ StartMenu::StartMenu(std::unique_ptr<Game> game)
 void StartMenu::HandleEvents()
 {
 	sf::Event event;
-	while (pGame->window.pollEvent(event))
+	while (pContext->window->pollEvent(event))
 	{
 		if (event.type == sf::Event::KeyPressed)
 		{
+
 			switch (event.key.code)
 			{
-			
 			case sf::Keyboard::Up:
 				if (curr_index > 0)
 				{
+					std::cout << "up pressed\n";
 					items[curr_index].setFillColor(sf::Color::White);
 					--curr_index;
 					items[curr_index].setFillColor(sf::Color::Red);
 				}
+				break;
 			case sf::Keyboard::Down:
 				if (curr_index < 2)
 				{
+					std::cout << "down pressed\n";
 					items[curr_index].setFillColor(sf::Color::White);
 					++curr_index;
 					items[curr_index].setFillColor(sf::Color::Red);
 				}
-			case sf::Keyboard::Return:
-				//pGame->ChangeState(std::make_unique<PlayGame>());
 				break;
+			case sf::Keyboard::Return:
+				//pContext->ChangeState(std::make_unique<PlayGame>(pContext));
+				break;
+
+			case sf::Keyboard::Escape:
+				pContext->window->close();
 			}
 		}
 
@@ -68,11 +75,11 @@ void StartMenu::HandleEvents()
 
 }
 
-void StartMenu::draw(sf::RenderTarget& target, sf::RenderStates states) const
+void StartMenu::Draw()
 {
 	for (const auto& item : items)
 	{
-		target.draw(item, states);
+		pContext->window->draw(item);
 	}
 
 }

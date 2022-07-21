@@ -2,11 +2,11 @@
 #include <thread>
 #include <chrono>
 
-PlayGame::PlayGame(std::unique_ptr<Game> game)
-    : GameState(std::move(game)), snake( 10,10 ), apple(rand() % grid_dim, rand() % grid_dim), grid_dim(20) //, game_over(false) //Apple should be rando
+PlayGame::PlayGame(std::shared_ptr<Context> context)
+    : pContext{ context }, snake{ 10, 10 }, apple{ rand() % grid_dim, rand() % grid_dim }//, game_over(false) //Apple should be rando
 {
     //Constants
-    int node_size = pGame->window.getSize().x / grid_dim; //size of the node in pixels 
+    int node_size = pContext->window->getSize().x / grid_dim; //size of the node in pixels 
 
     //Fill the grid
     for (int y = 0;y < grid_dim;++y)
@@ -26,7 +26,7 @@ PlayGame::PlayGame(std::unique_ptr<Game> game)
 void PlayGame::HandleEvents()
 {
     sf::Event event;
-    while (pGame->window.pollEvent(event))
+    while (pContext->window->pollEvent(event))
     {
 
         if (event.type == sf::Event::KeyPressed)
@@ -98,7 +98,7 @@ void PlayGame::Update()
 
 //Basically only draw the nodes occupied by snake or appl
 //NOT FINISHED
-void PlayGame::draw(sf::RenderTarget& target, sf::RenderStates states) const
+void PlayGame::Draw()
 {
     for (int y = 0;y < grid_dim;++y) 
     {
@@ -111,12 +111,12 @@ void PlayGame::draw(sf::RenderTarget& target, sf::RenderStates states) const
             //Need to check if this point is occupied by any of the snake pieces
             if (snake.contains(x, y))
             {
-                pGame->window.draw(grid[y * grid_dim + x]);
+                pContext->window->draw(grid[y * grid_dim + x]);
             }
 
             if (x == apple.first && y == apple.second) //Apple is on this node
             {
-                pGame->window.draw(grid[y * grid_dim + x]);
+                pContext->window->draw(grid[y * grid_dim + x]);
             }
             //window.draw(grid[y * grid_dim + x]);
         }
