@@ -1,15 +1,18 @@
 #pragma once
-#include <SFML/Graphics.hpp>
 #include "game_state.h"
+#include "play_game.h"
+#include "start_menu.h"
+
+#include <memory>
 #include "game.h"
 
-//struct Context; //forward declaration
 
-class StartMenu : public GameState
+class GameOver : public GameState
 {
 public:
-	StartMenu(std::shared_ptr<Context> context);
-	~StartMenu() {};
+
+	GameOver(std::shared_ptr<Context> context);
+	~GameOver() {}; //Default
 	void HandleEvents() override;
 	void Update() {};
 	void Draw() override;
@@ -18,5 +21,5 @@ private:
 	std::shared_ptr<Context> pContext;
 	int curr_index; //index of the highlighted item
 	sf::Font font;
-	sf::Text items[3];
+	sf::Text items[2];
 };

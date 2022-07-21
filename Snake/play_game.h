@@ -2,6 +2,7 @@
 #include "game_state.h"
 #include "snake.h"
 #include "game.h"
+#include "game_over.h"
 #include <vector>
 #include <cstdlib>
 

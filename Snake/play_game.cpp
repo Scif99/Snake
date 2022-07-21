@@ -74,16 +74,17 @@ void PlayGame::Update()
     if (snake.intersect() || std::clamp(front_coords.first, 0, GRID_DIM - 1) != front_coords.first
         || std::clamp(front_coords.second, 0, GRID_DIM - 1) != front_coords.second)
     {
-        //game_over = true;
-        std::this_thread::sleep_for(std::chrono::milliseconds(500)); //Pause for a while when you lose
-        snake.reset();
+        pContext->ChangeState(std::make_unique<GameOver>(pContext));
+        return;
+        //std::this_thread::sleep_for(std::chrono::milliseconds(500)); //Pause for a while when you lose
+        //snake.reset();
 
-        //Reset apple too
-        //But make sure it doesnt spawn inside the snake
-        do {
-            apple.first = rand() % GRID_DIM;
-            apple.second = rand() % GRID_DIM; //x,y
-        } while (snake.contains(apple.first, apple.second));
+        ////Reset apple too
+        ////But make sure it doesnt spawn inside the snake
+        //do {
+        //    apple.first = rand() % GRID_DIM;
+        //    apple.second = rand() % GRID_DIM; //x,y
+        //} while (snake.contains(apple.first, apple.second));
     }
 
     //If the snake eats the apple, spawn apple at a new random point
