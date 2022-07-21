@@ -82,9 +82,10 @@ void StartMenu::HandleEvents()
 
 void StartMenu::Draw()
 {
+	pContext->window->clear();
 	for (const auto& item : items)
 	{
 		pContext->window->draw(item);
 	}
-
+	pContext->window->display();
 }

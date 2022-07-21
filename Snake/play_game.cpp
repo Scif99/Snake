@@ -103,6 +103,7 @@ void PlayGame::Update()
 //NOT FINISHED
 void PlayGame::Draw()
 {
+    pContext->window->clear();
     for (int y = 0;y < GRID_DIM;++y)
     {
         for (int x = 0;x < GRID_DIM;++x)
@@ -126,5 +127,7 @@ void PlayGame::Draw()
             //window.draw(grid[y * grid_dim + x]);
         }
     }
+
+    pContext->window->display();
 
 }

@@ -22,14 +22,8 @@ void Game::run()
 {
 	while (context->window->isOpen())
 	{
-
 		context->state->HandleEvents();
-
-		context->state->Update(); 
-		
-		context->window->clear();
+		context->state->Update(); 	
 		context->state->Draw();
-		context->window->display();
 	}
-
 }
