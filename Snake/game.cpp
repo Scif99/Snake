@@ -9,7 +9,9 @@ Game::Game()
 {
 	
 	context->window->create(sf::VideoMode(500, 500), "Snake");
+	context->window->setFramerateLimit(10); //hack to fix timesteps
 	context->state = std::make_unique<StartMenu>(context); //Game always starts in the StartMenu state
+
 
 }
 
@@ -23,7 +25,7 @@ void Game::run()
 
 		context->state->HandleEvents();
 
-		context->state->Update(); //for changing state?
+		context->state->Update(); 
 		
 		context->window->clear();
 		context->state->Draw();

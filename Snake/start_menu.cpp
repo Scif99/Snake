@@ -62,7 +62,14 @@ void StartMenu::HandleEvents()
 				}
 				break;
 			case sf::Keyboard::Return:
-				//pContext->ChangeState(std::make_unique<PlayGame>(pContext));
+				if(curr_index==2) {
+					pContext->window->close();
+				}
+				else if(curr_index==0)
+				{
+					pContext->ChangeState(std::make_unique<PlayGame>(pContext));
+					return; //After switching context, exit loop.
+				}
 				break;
 
 			case sf::Keyboard::Escape:

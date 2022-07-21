@@ -19,6 +19,5 @@ private:
 	Snake snake;
 	std::pair<int, int> apple;
 	std::vector<sf::RectangleShape> grid;
-	int grid_dim{20};
 	//bool game_over;
 };

@@ -2,20 +2,22 @@
 #include <thread>
 #include <chrono>
 
+
+#define GRID_DIM 20
+
 PlayGame::PlayGame(std::shared_ptr<Context> context)
-    : pContext{ context }, snake{ 10, 10 }, apple{ rand() % grid_dim, rand() % grid_dim }//, game_over(false) //Apple should be rando
+    : pContext{ context }, snake{ 10, 10 }, apple{ rand() % GRID_DIM, rand() % GRID_DIM}//, game_over(false) //Apple should be rando
 {
     //Constants
-    int node_size = pContext->window->getSize().x / grid_dim; //size of the node in pixels 
+    int node_size = pContext->window->getSize().x / GRID_DIM; //size of the node in pixels 
 
     //Fill the grid
-    for (int y = 0;y < grid_dim;++y)
+    for (int y = 0;y < GRID_DIM;++y)
     {
-        for (int x = 0;x < grid_dim;++x)
+        for (int x = 0;x < GRID_DIM;++x)
         {
             sf::RectangleShape node(sf::Vector2f(node_size, node_size));
             node.setPosition(sf::Vector2f(x * node_size, y * node_size));
-            node.setFillColor(sf::Color::Green);
             grid.push_back(node);
         }
 
@@ -69,8 +71,8 @@ void PlayGame::Update()
 
     //Reset if snake moves out of bounds or collides with itself
     auto front_coords = snake.front().location;
-    if (snake.intersect() || std::clamp(front_coords.first, 0, grid_dim - 1) != front_coords.first
-        || std::clamp(front_coords.second, 0, grid_dim - 1) != front_coords.second)
+    if (snake.intersect() || std::clamp(front_coords.first, 0, GRID_DIM - 1) != front_coords.first
+        || std::clamp(front_coords.second, 0, GRID_DIM - 1) != front_coords.second)
     {
         //game_over = true;
         std::this_thread::sleep_for(std::chrono::milliseconds(500)); //Pause for a while when you lose
@@ -79,8 +81,8 @@ void PlayGame::Update()
         //Reset apple too
         //But make sure it doesnt spawn inside the snake
         do {
-            apple.first = rand() % grid_dim;
-            apple.second = rand() % grid_dim; //x,y
+            apple.first = rand() % GRID_DIM;
+            apple.second = rand() % GRID_DIM; //x,y
         } while (snake.contains(apple.first, apple.second));
     }
 
@@ -88,9 +90,9 @@ void PlayGame::Update()
     if (snake.front().location.first == apple.first && snake.front().location.second == apple.second)
     {
         snake.add_piece(); //Add a piece to the tail of the snake
-        apple.first = rand() % grid_dim;
-        apple.second = rand() % grid_dim; //x,y
-        grid[apple.second * grid_dim + apple.first].setFillColor(sf::Color::Red);
+        apple.first = rand() % GRID_DIM;
+        apple.second = rand() % GRID_DIM; //x,y
+        grid[apple.second * GRID_DIM + apple.first].setFillColor(sf::Color::Red);
     }
 
 
@@ -100,23 +102,25 @@ void PlayGame::Update()
 //NOT FINISHED
 void PlayGame::Draw()
 {
-    for (int y = 0;y < grid_dim;++y) 
+    for (int y = 0;y < GRID_DIM;++y)
     {
-        for (int x = 0;x < grid_dim;++x)
+        for (int x = 0;x < GRID_DIM;++x)
         {
-            int index = y * grid_dim + x;
+            int index = y * GRID_DIM + x;
 
             sf::RectangleShape curr = grid[index];
 
             //Need to check if this point is occupied by any of the snake pieces
             if (snake.contains(x, y))
             {
-                pContext->window->draw(grid[y * grid_dim + x]);
+                grid[y * GRID_DIM + x].setFillColor(sf::Color::Green);
+                pContext->window->draw(grid[y * GRID_DIM + x]);
             }
 
             if (x == apple.first && y == apple.second) //Apple is on this node
             {
-                pContext->window->draw(grid[y * grid_dim + x]);
+                grid[y * GRID_DIM + x].setFillColor(sf::Color::Red);
+                pContext->window->draw(grid[y * GRID_DIM + x]);
             }
             //window.draw(grid[y * grid_dim + x]);
         }
