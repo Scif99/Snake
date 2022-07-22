@@ -36,7 +36,7 @@ void PlayGame::HandleEvents()
         {
             if (event.key.code == sf::Keyboard::Escape)
             {
-                pContext->ChangeState(std::make_unique<PauseMenu>(pContext));
+                pContext->state_stack.emplace((std::make_unique<PauseMenu>(pContext)));
                 return;
             }
 

@@ -22,8 +22,8 @@ void PauseMenu::HandleEvents()
 	{
 		if (event.type == sf::Event::KeyPressed)
 		{
-			if(event.key.code==sf::Keyboard::Escape)
-				pContext->ChangeState(std::make_unique<PlayGame>(pContext));
+			if (event.key.code == sf::Keyboard::Escape)
+				pContext->state_stack.pop();
 			return;
 		}
 

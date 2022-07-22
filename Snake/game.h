@@ -1,16 +1,18 @@
 #pragma once
 #include "game_state.h"
 #include <memory>
+#include <stack>
+#include <vector>
 
 struct Context
 {
-	std::unique_ptr<GameState> state;
+	std::stack<std::unique_ptr<GameState>> state_stack;
 	std::unique_ptr<sf::RenderWindow> window;
 
 	Context()  
 		: window{ std::make_unique<sf::RenderWindow>() } {}
 
-	void ChangeState(std::unique_ptr<GameState> next_state) {state = std::move(next_state);}
+	void ChangeState(std::unique_ptr<GameState> next_state); 
 };
 
 class Game
