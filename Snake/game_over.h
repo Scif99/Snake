@@ -14,7 +14,7 @@ public:
 	GameOver(std::shared_ptr<Context> context);
 	~GameOver() {}; //Default
 	void HandleEvents() override;
-	void Update() {};
+	void Update(sf::Time elapsed) {};
 	void Draw() override;
 
 private:

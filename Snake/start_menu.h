@@ -11,7 +11,7 @@ public:
 	StartMenu(std::shared_ptr<Context> context);
 	~StartMenu() {};
 	void HandleEvents() override;
-	void Update() {};
+	void Update(sf::Time elapsed) {};
 	void Draw() override;
 
 private:

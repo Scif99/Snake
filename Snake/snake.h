@@ -40,6 +40,7 @@ public:
 
 	piece& front() { return body[0]; } 
 	const piece& front() const { return body[0]; }
+	int size() const { return body.size(); }
 
 private:
 	std::vector<piece> body; //The snake is  a vector of coordinate pairs. body[0] is the first element

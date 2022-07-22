@@ -33,6 +33,9 @@
     <ClCompile Include="game_over.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="pause_menu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="snake.h">
@@ -51,6 +54,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="game_over.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pause_menu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

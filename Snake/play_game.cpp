@@ -1,12 +1,13 @@
 #include "play_game.h"
 #include <thread>
 #include <chrono>
-
+#include <memory>
+#include "pause_menu.h"
 
 #define GRID_DIM 20
 
 PlayGame::PlayGame(std::shared_ptr<Context> context)
-    : pContext{ context }, snake{ 10, 10 }, apple{ rand() % GRID_DIM, rand() % GRID_DIM}//, game_over(false) //Apple should be rando
+    : pContext{ context }, snake{ 10, 10 }, apple{ rand() % GRID_DIM, rand() % GRID_DIM}, tick_rate{10}
 {
     //Constants
     int node_size = pContext->window->getSize().x / GRID_DIM; //size of the node in pixels 
@@ -33,6 +34,11 @@ void PlayGame::HandleEvents()
 
         if (event.type == sf::Event::KeyPressed)
         {
+            if (event.key.code == sf::Keyboard::Escape)
+            {
+                pContext->ChangeState(std::make_unique<PauseMenu>(pContext));
+                return;
+            }
 
             //Movement
             //Note that the snake is not allowed to turn 180 degrees (i.e turn in on itself)
@@ -64,8 +70,9 @@ void PlayGame::HandleEvents()
 
 }
 
-void PlayGame::Update()
+void PlayGame::Update(sf::Time elapsed)
 {
+
     snake.update_direction();
     snake.update_position();
 
@@ -76,25 +83,20 @@ void PlayGame::Update()
     {
         pContext->ChangeState(std::make_unique<GameOver>(pContext));
         return;
-        //std::this_thread::sleep_for(std::chrono::milliseconds(500)); //Pause for a while when you lose
-        //snake.reset();
 
-        ////Reset apple too
-        ////But make sure it doesnt spawn inside the snake
-        //do {
-        //    apple.first = rand() % GRID_DIM;
-        //    apple.second = rand() % GRID_DIM; //x,y
-        //} while (snake.contains(apple.first, apple.second));
     }
 
     //If the snake eats the apple, spawn apple at a new random point
     if (snake.front().location.first == apple.first && snake.front().location.second == apple.second)
     {
+        //++tick_rate;
         snake.add_piece(); //Add a piece to the tail of the snake
+        pContext->window->setFramerateLimit(10 + snake.size()); //hack to increase speed
         apple.first = rand() % GRID_DIM;
         apple.second = rand() % GRID_DIM; //x,y
         grid[apple.second * GRID_DIM + apple.first].setFillColor(sf::Color::Red);
     }
+
 
 
 }

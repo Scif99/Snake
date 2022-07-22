@@ -158,6 +158,7 @@
     <ClCompile Include="game.cpp" />
     <ClCompile Include="game_over.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="pause_menu.cpp" />
     <ClCompile Include="play_game.cpp" />
     <ClCompile Include="snake.cpp" />
     <ClCompile Include="start_menu.cpp" />
@@ -166,6 +167,7 @@
     <ClInclude Include="game.h" />
     <ClInclude Include="game_over.h" />
     <ClInclude Include="game_state.h" />
+    <ClInclude Include="pause_menu.h" />
     <ClInclude Include="play_game.h" />
     <ClInclude Include="snake.h" />
     <ClInclude Include="start_menu.h" />

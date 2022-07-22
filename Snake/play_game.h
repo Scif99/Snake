@@ -12,7 +12,7 @@ public:
 	PlayGame(std::shared_ptr<Context> context);
 	~PlayGame() {};
 	void HandleEvents() override;
-	void Update() override;
+	void Update(sf::Time elapsed) override;
 	virtual void Draw() override;
 
 private:
@@ -20,5 +20,6 @@ private:
 	Snake snake;
 	std::pair<int, int> apple;
 	std::vector<sf::RectangleShape> grid;
+	int tick_rate;
 	//bool game_over;
 };
