@@ -1,7 +1,7 @@
 #include "pause_menu.h"
 #include "play_game.h"
 
-PauseMenu::PauseMenu(std::shared_ptr<Context> context)
+PauseMenu::PauseMenu(std::shared_ptr<Context>& context)
 	: pContext{ context }
 {
 	if (!font.loadFromFile("arial.ttf"))
@@ -23,7 +23,7 @@ void PauseMenu::HandleEvents()
 		if (event.type == sf::Event::KeyPressed)
 		{
 			if (event.key.code == sf::Keyboard::Escape)
-				pContext->state_stack.pop();
+				pContext->state_man->RemoveState(); //TO_DO
 			return;
 		}
 

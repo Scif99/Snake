@@ -5,18 +5,12 @@
 #include <iostream>
 
 
-void Context::ChangeState(std::unique_ptr<GameState> next_state)
-{
-	if (!state_stack.empty()) { state_stack.pop(); }
-	state_stack.emplace(std::move(next_state));
-}
-
 Game::Game()
 	: context{std::make_shared<Context>()}
 {
-	context->window->create(sf::VideoMode(500, 500), "Snake");
+	context->window->create(sf::VideoMode(500, 500), "Snake"); //Create a 500 x 500 window
 	context->window->setFramerateLimit(10); //hack to fix timesteps
-	context->state_stack.push(std::make_unique<StartMenu>(context)); //Game always starts in the Start Menu
+	context->state_man->AddState(std::make_unique<StartMenu>(context), false); //Game always starts in the Start Menu
 }
 
 
@@ -29,8 +23,8 @@ void Game::run()
 	{
 		sf::Time elapsed = clock.restart();
 
-		context->state_stack.top()->HandleEvents();
-		context->state_stack.top()->Update(elapsed);
-		context->state_stack.top()->Draw();
+		context->state_man->CurrentState()->HandleEvents();
+		context->state_man->CurrentState()->Update(elapsed);
+		context->state_man->CurrentState()->Draw();
 	}
 }

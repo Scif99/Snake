@@ -7,7 +7,7 @@
 
 #define ITEM_SIZE 3
 
-StartMenu::StartMenu(std::shared_ptr<Context> context)
+StartMenu::StartMenu(std::shared_ptr<Context>& context)
 	: pContext{ context }, curr_index{ 0 }
 {
 	if (!font.loadFromFile("arial.ttf"))
@@ -68,7 +68,7 @@ void StartMenu::HandleEvents()
 				}
 				else if(curr_index==0)
 				{
-					pContext->ChangeState(std::make_unique<PlayGame>(pContext));
+					pContext->state_man->AddState(std::make_unique<PlayGame>(pContext), true);
 					return; //After switching context, exit loop.
 				}
 				break;

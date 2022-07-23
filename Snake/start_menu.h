@@ -8,7 +8,7 @@
 class StartMenu : public GameState
 {
 public:
-	StartMenu(std::shared_ptr<Context> context);
+	StartMenu(std::shared_ptr<Context>& context);
 	~StartMenu() {};
 	void HandleEvents() override;
 	void Update(sf::Time elapsed) {};

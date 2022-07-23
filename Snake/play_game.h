@@ -9,7 +9,7 @@
 class PlayGame : public GameState
 {
 public:
-	PlayGame(std::shared_ptr<Context> context);
+	PlayGame(std::shared_ptr<Context>& context);
 	~PlayGame() {};
 	void HandleEvents() override;
 	void Update(sf::Time elapsed) override;

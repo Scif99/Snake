@@ -11,7 +11,6 @@ public:
 	virtual void HandleEvents() = 0;
 	virtual void Update(sf::Time elapsed) = 0;
 	virtual void Draw()  = 0; 
-	//void SetContext(Game game) { pGame = std::make_unique<Game>(); };
 
 };
 

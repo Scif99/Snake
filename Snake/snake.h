@@ -14,10 +14,10 @@
 struct piece
 {
 	std::pair<int, int> location;
-	std::pair<int, int> direction{ 0,0 }; //(x,y)
+	std::pair<int, int> direction; //(x,y)
 
 	piece(int x, int y, int x_dir, int y_dir)
-		:location({ x,y }), direction({ x_dir, y_dir }) {}
+		:location{ x,y }, direction{ x_dir, y_dir } {}
 
 };
 

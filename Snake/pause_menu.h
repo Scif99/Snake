@@ -6,7 +6,7 @@
 class PauseMenu : public GameState
 {
 public:
-	PauseMenu(std::shared_ptr<Context> context);
+	PauseMenu(std::shared_ptr<Context>& context);
 	~PauseMenu() = default; //Default
 	void HandleEvents();
 	void Update(sf::Time elapsed) {};

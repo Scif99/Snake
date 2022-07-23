@@ -6,11 +6,12 @@
 
 #define GRID_DIM 20
 
-PlayGame::PlayGame(std::shared_ptr<Context> context)
+PlayGame::PlayGame(std::shared_ptr<Context>& context)
     : pContext{ context }, snake{ 10, 10 }, apple{ rand() % GRID_DIM, rand() % GRID_DIM}, tick_rate{10}
 {
     //Constants
     int node_size = pContext->window->getSize().x / GRID_DIM; //size of the node in pixels 
+    pContext->window->setFramerateLimit(10 + snake.size()); //hack to increase speed
 
     //Fill the grid
     for (int y = 0;y < GRID_DIM;++y)
@@ -36,7 +37,7 @@ void PlayGame::HandleEvents()
         {
             if (event.key.code == sf::Keyboard::Escape)
             {
-                pContext->state_stack.emplace((std::make_unique<PauseMenu>(pContext)));
+               pContext->state_man->AddState(std::make_unique<PauseMenu>(pContext), false);
                 return;
             }
 
@@ -81,7 +82,7 @@ void PlayGame::Update(sf::Time elapsed)
     if (snake.intersect() || std::clamp(front_coords.first, 0, GRID_DIM - 1) != front_coords.first
         || std::clamp(front_coords.second, 0, GRID_DIM - 1) != front_coords.second)
     {
-        pContext->ChangeState(std::make_unique<GameOver>(pContext));
+        pContext->state_man->AddState(std::make_unique<GameOver>(pContext), true);
         return;
 
     }
