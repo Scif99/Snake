@@ -21,10 +21,10 @@ void Game::run()
 	sf::Clock clock;
 	while (context->window->isOpen())
 	{
-		sf::Time elapsed = clock.restart();
+		sf::Time dt = clock.restart();
 
 		context->state_man->CurrentState()->HandleEvents();
-		context->state_man->CurrentState()->Update(elapsed);
+		context->state_man->CurrentState()->Update(dt);
 		context->state_man->CurrentState()->Draw();
 	}
 }
